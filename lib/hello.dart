@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hello_fullscroll/mouse_reactive_text.dart';
-import 'dart:io' show Platform;
+import 'package:hello_fullscroll/pointer_reactive_text.dart';
 
 class Hello extends StatefulWidget {
   const Hello({Key? key, required this.onNextPagePressed}) : super(key: key);
@@ -23,7 +22,7 @@ class _HelloState extends State<Hello> {
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
-          GestureReactiveText("Hello there.", sensitivity: 0.25),
+          PointerReactiveText("Hello there.", sensitivity: 0.25),
           Column(
             children: [
               Spacer(),
