@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_fullscroll/hello.dart';
+import 'package:hello_fullscroll/pointer_reactive_text.dart';
 
 class MainScreenPageView extends StatelessWidget {
   MainScreenPageView({Key? key}) : super(key: key);
@@ -12,9 +13,33 @@ class MainScreenPageView extends StatelessWidget {
       scrollDirection: Axis.vertical,
       pageSnapping: true,
       controller: this.controller,
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
-        Hello(
+        InitialTextScreen(
+          "Hello.",
           onNextPagePressed: () => this.controller.nextPage(
+                duration: Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              ),
+        ),
+        PointerReactiveText(
+          "One",
+          onTap: () => this.controller.nextPage(
+                duration: Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              ),
+        ),
+        PointerReactiveText(
+          "Two",
+          onTap: () => this.controller.nextPage(
+                duration: Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              ),
+        ),
+        PointerReactiveText(
+          "Three",
+          onTap: () => this.controller.animateToPage(
+                0,
                 duration: Duration(milliseconds: 200),
                 curve: Curves.easeInOut,
               ),

@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 class PointerReactiveText extends StatefulWidget {
-  const PointerReactiveText(this.text, {Key? key, this.sensitivity = 0.5})
+  const PointerReactiveText(this.text,
+      {Key? key, this.sensitivity = 0.25, required this.onTap})
       : super(key: key);
   final String text;
   final double sensitivity;
+  final VoidCallback onTap;
 
   @override
   _PointerReactiveTextState createState() => _PointerReactiveTextState();
 }
 
 class _PointerReactiveTextState extends State<PointerReactiveText> {
-  double x = 0.0;
-  double y = 0.0;
+  double? x;
+  double? y;
 
   void _updateLocation(double x, double y) {
     setState(() {
@@ -25,13 +27,21 @@ class _PointerReactiveTextState extends State<PointerReactiveText> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    double xOffsetPercentage = ((this.x / (size.width)) - 0.5);
-    double yOffsetPercentage = ((this.y / (size.height)) - 0.5);
+
+    if (this.x == null) {
+      this.x = size.width / 2;
+    }
+    if (this.y == null) {
+      this.y = size.width / 2;
+    }
+
+    double xOffsetPercentage = ((this.x! / (size.width)) - 0.5);
+    double yOffsetPercentage = ((this.y! / (size.height)) - 0.5);
 
     return GestureDetector(
+      onTap: widget.onTap,
       // GestureDetector for mobile support
       onPanUpdate: (details) {
-        print(details);
         this._updateLocation(
             details.globalPosition.dx, details.globalPosition.dy);
       },
@@ -74,26 +84,29 @@ class ReactiveText extends StatelessWidget {
         ..setEntry(3, 2, 0.001)
         ..rotateY(-(math.pi * xOffsetPercentage) * this.sensitivity)
         ..rotateX((math.pi * yOffsetPercentage) * this.sensitivity),
-      child: Text(
-        this.text,
-        style: TextStyle(fontSize: 72, shadows: [
-          Shadow(
-            offset: Offset(
-              -10 * (xOffsetPercentage),
-              -10 * (yOffsetPercentage),
+      child: Center(
+        child: Text(
+          this.text,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 72, shadows: [
+            Shadow(
+              offset: Offset(
+                -10 * (xOffsetPercentage),
+                -10 * (yOffsetPercentage),
+              ),
+              blurRadius: 5.0,
+              color: Theme.of(context).accentColor,
             ),
-            blurRadius: 5.0,
-            color: Theme.of(context).accentColor,
-          ),
-          Shadow(
-            offset: Offset(
-              -15 * (xOffsetPercentage),
-              -15 * (yOffsetPercentage),
+            Shadow(
+              offset: Offset(
+                -15 * (xOffsetPercentage),
+                -15 * (yOffsetPercentage),
+              ),
+              blurRadius: 30,
+              color: Theme.of(context).accentColor,
             ),
-            blurRadius: 30,
-            color: Theme.of(context).accentColor,
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }
